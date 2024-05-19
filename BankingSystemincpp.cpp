@@ -1,17 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <limits>
 
-// Customer class
 class Customer {
 public:
     std::string name;
     int customerID;
-
     Customer(std::string n, int id) : name(n), customerID(id) {}
 };
 
-// Account class
 class Account {
 public:
     int accountNumber;
@@ -19,13 +17,11 @@ public:
     std::vector<std::string> transactions;
 
     Account(int num, double bal) : accountNumber(num), balance(bal) {}
-
     void deposit(double amount) {
         balance += amount;
         transactions.push_back("Deposited: $" + std::to_string(amount));
         std::cout << "Deposited $" << amount << " successfully.\n";
     }
-
     void withdraw(double amount) {
         if (amount > balance) {
             std::cout << "Insufficient funds for withdrawal.\n";
@@ -35,50 +31,47 @@ public:
         transactions.push_back("Withdrew: $" + std::to_string(amount));
         std::cout << "Withdrew $" << amount << " successfully.\n";
     }
-
     void printAccountDetails() {
         std::cout << "Account Number: " << accountNumber << "\n";
         std::cout << "Balance: $" << balance << "\n";
         std::cout << "Transactions:\n";
-        for (size_t i = 0; i < transactions.size(); i++) {
-            std::cout << transactions[i] << "\n";
+        for (std::vector<std::string>::iterator it = transactions.begin(); it != transactions.end(); ++it) {
+            std::cout << *it << "\n";
         }
     }
 };
 
-// BankingServices class
 class BankingServices {
 public:
     std::vector<Customer> customers;
     std::vector<Account> accounts;
-
     void addCustomer(std::string name, int customerID) {
-        Customer newCustomer(name, customerID);
-        customers.push_back(newCustomer);
+        customers.push_back(Customer(name, customerID));
     }
-
     void addAccount(int customerID, int accountNumber, double initialBalance) {
-        Account newAccount(accountNumber, initialBalance);
-        accounts.push_back(newAccount);
+        accounts.push_back(Account(accountNumber, initialBalance));
         std::cout << "Account created successfully for customer ID " << customerID << ".\n";
     }
-
     Account* findAccount(int accountNumber) {
-        for (size_t i = 0; i < accounts.size(); i++) {
-            if (accounts[i].accountNumber == accountNumber) {
-                return &accounts[i];
-            }
+        for (std::vector<Account>::iterator it = accounts.begin(); it != accounts.end(); ++it) {
+            if (it->accountNumber == accountNumber) return &(*it);
         }
         return nullptr;
     }
 };
+
+void handleInvalidInput() {
+    std::cin.clear(); // Clear error flag
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignore incorrect input
+    std::cout << "Invalid input. Please enter a valid number.\n";
+}
 
 int main() {
     BankingServices bank;
     bank.addCustomer("John Doe", 1);  // Example initial customer
 
     int choice, accountNumber, customerID;
-    double initialBalance, amount;  // Declare 'amount' here to use in deposit and withdrawal
+    double initialBalance, amount;
 
     while (true) {
         std::cout << "\nBanking System Menu:\n";
@@ -90,21 +83,41 @@ int main() {
         std::cout << "Enter your choice: ";
         std::cin >> choice;
 
+        if (!std::cin) {
+            handleInvalidInput();
+            continue;
+        }
+
         switch (choice) {
             case 1:
                 std::cout << "Enter customer ID: ";
-                std::cin >> customerID;
+                if (!(std::cin >> customerID)) {
+                    handleInvalidInput();
+                    continue;
+                }
                 std::cout << "Enter new account number: ";
-                std::cin >> accountNumber;
+                if (!(std::cin >> accountNumber)) {
+                    handleInvalidInput();
+                    continue;
+                }
                 std::cout << "Enter initial balance: ";
-                std::cin >> initialBalance;
+                if (!(std::cin >> initialBalance)) {
+                    handleInvalidInput();
+                    continue;
+                }
                 bank.addAccount(customerID, accountNumber, initialBalance);
                 break;
             case 2:
                 std::cout << "Enter account number: ";
-                std::cin >> accountNumber;
+                if (!(std::cin >> accountNumber)) {
+                    handleInvalidInput();
+                    continue;
+                }
                 std::cout << "Enter amount to deposit: ";
-                std::cin >> amount;
+                if (!(std::cin >> amount)) {
+                    handleInvalidInput();
+                    continue;
+                }
                 if (Account* acc = bank.findAccount(accountNumber)) {
                     acc->deposit(amount);
                 } else {
@@ -113,9 +126,15 @@ int main() {
                 break;
             case 3:
                 std::cout << "Enter account number: ";
-                std::cin >> accountNumber;
+                if (!(std::cin >> accountNumber)) {
+                    handleInvalidInput();
+                    continue;
+                }
                 std::cout << "Enter amount to withdraw: ";
-                std::cin >> amount;
+                if (!(std::cin >> amount)) {
+                    handleInvalidInput();
+                    continue;
+                }
                 if (Account* acc = bank.findAccount(accountNumber)) {
                     acc->withdraw(amount);
                 } else {
@@ -124,7 +143,10 @@ int main() {
                 break;
             case 4:
                 std::cout << "Enter account number: ";
-                std::cin >> accountNumber;
+                if (!(std::cin >> accountNumber)) {
+                    handleInvalidInput();
+                    continue;
+                }
                 if (Account* acc = bank.findAccount(accountNumber)) {
                     acc->printAccountDetails();
                 } else {
@@ -135,7 +157,7 @@ int main() {
                 std::cout << "Exiting program.\n";
                 return 0;
             default:
-                std::cout << "Invalid choice. Please try again.\n";
+                std::cout << "Invalid choice. Please enter a number between 1 and 5.\n";
         }
     }
 
