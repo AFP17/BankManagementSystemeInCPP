@@ -60,6 +60,7 @@ public:
     void addAccount(int customerID, int accountNumber, double initialBalance) {
         Account newAccount(accountNumber, initialBalance);
         accounts.push_back(newAccount);
+        std::cout << "Account created successfully for customer ID " << customerID << ".\n";
     }
 
     Account* findAccount(int accountNumber) {
@@ -74,23 +75,32 @@ public:
 
 int main() {
     BankingServices bank;
-    bank.addCustomer("John Doe", 1);
-    bank.addAccount(1, 101, 1000.0);
+    bank.addCustomer("John Doe", 1);  // Example initial customer
 
-    int choice, accountNumber;
-    double amount;
+    int choice, accountNumber, customerID;
+    double initialBalance, amount;  // Declare 'amount' here to use in deposit and withdrawal
 
     while (true) {
         std::cout << "\nBanking System Menu:\n";
-        std::cout << "1. Deposit Money\n";
-        std::cout << "2. Withdraw Money\n";
-        std::cout << "3. Show Account Details\n";
-        std::cout << "4. Exit\n";
+        std::cout << "1. Create Account\n";
+        std::cout << "2. Deposit Money\n";
+        std::cout << "3. Withdraw Money\n";
+        std::cout << "4. Show Account Details\n";
+        std::cout << "5. Exit\n";
         std::cout << "Enter your choice: ";
         std::cin >> choice;
 
         switch (choice) {
             case 1:
+                std::cout << "Enter customer ID: ";
+                std::cin >> customerID;
+                std::cout << "Enter new account number: ";
+                std::cin >> accountNumber;
+                std::cout << "Enter initial balance: ";
+                std::cin >> initialBalance;
+                bank.addAccount(customerID, accountNumber, initialBalance);
+                break;
+            case 2:
                 std::cout << "Enter account number: ";
                 std::cin >> accountNumber;
                 std::cout << "Enter amount to deposit: ";
@@ -101,7 +111,7 @@ int main() {
                     std::cout << "Account not found.\n";
                 }
                 break;
-            case 2:
+            case 3:
                 std::cout << "Enter account number: ";
                 std::cin >> accountNumber;
                 std::cout << "Enter amount to withdraw: ";
@@ -112,7 +122,7 @@ int main() {
                     std::cout << "Account not found.\n";
                 }
                 break;
-            case 3:
+            case 4:
                 std::cout << "Enter account number: ";
                 std::cin >> accountNumber;
                 if (Account* acc = bank.findAccount(accountNumber)) {
@@ -121,7 +131,7 @@ int main() {
                     std::cout << "Account not found.\n";
                 }
                 break;
-            case 4:
+            case 5:
                 std::cout << "Exiting program.\n";
                 return 0;
             default:
