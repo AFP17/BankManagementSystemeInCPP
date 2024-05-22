@@ -12,9 +12,9 @@ struct Account {
     std::vector<std::string> transactions;
 };
 
-Account accounts[10]; // Fixed-size array for accounts
-int numAccounts = 0; // Counter for the number of accounts
-int currentUserIndex = -1; // Index for the current logged-in user
+Account accounts[10]; 
+int numAccounts = 0;
+int currentUserIndex = -1;
 
 std::string formatCurrency(double amount) {
     char buffer[50];
@@ -34,7 +34,7 @@ void createAccount() {
     std::cout << "Enter your name: ";
     std::cin.ignore();
     getline(std::cin, accounts[numAccounts].name);
-    accounts[numAccounts].accountNumber = rand() % 90000 + 10000; // Random 5-digit ID
+    accounts[numAccounts].accountNumber = rand() % 90000 + 10000;
     std::cout << "Enter initial balance: ";
     std::cin >> accounts[numAccounts].balance;
     std::cout << "\n============================\n";
@@ -70,7 +70,7 @@ void deposit() {
     std::cout << "\n--- Deposit Money ---\n";
     std::cout << "Enter amount to deposit: ";
     std::cin >> amount;
-    std::cin.ignore(); // Ignore newline character left in buffer
+    std::cin.ignore();
     std::cout << "Enter description for this transaction: ";
     getline(std::cin, description);
 
@@ -89,7 +89,7 @@ void withdraw() {
     std::cout << "\n--- Withdraw Money ---\n";
     std::cout << "Enter amount to withdraw: ";
     std::cin >> amount;
-    std::cin.ignore(); // Ignore newline character left in buffer
+    std::cin.ignore();
     std::cout << "Enter description for this transaction: ";
     getline(std::cin, description);
 
@@ -129,7 +129,7 @@ void showAccountDetailsMenu() {
         std::cin >> choice;
 
         if (choice == 1) {
-            return; // Return to the user menu
+            return;
         } else {
             std::cout << "\nInvalid choice. Please enter 1 to return.\n";
         }
@@ -164,9 +164,9 @@ void userMenu() {
                 break;
             case 4:
                 currentUserIndex = -1;
-                return; // Log off and return to the main menu
+                return; 
             case 5:
-                std::cout << "\nExiting program. Thank you for using our services.\n";
+                std::cout << "\nExiting program.\n";
                 exit(0);
             default:
                 std::cout << "\nInvalid choice. Please enter a number between 1 and 5.\n";
@@ -175,7 +175,7 @@ void userMenu() {
 }
 
 int main() {
-    srand(time(0)); // Initialize random number generator
+    srand(time(0)); 
     int choice;
 
     while (true) {
@@ -200,7 +200,7 @@ int main() {
                 }
                 break;
             case 3:
-                std::cout << "\nExiting program. Thank you for using our services.\n";
+                std::cout << "\nExiting program.\n";
                 return 0;
             default:
                 std::cout << "\nInvalid choice. Please enter a number between 1 and 3.\n";
